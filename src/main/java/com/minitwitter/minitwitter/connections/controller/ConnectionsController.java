@@ -1,7 +1,7 @@
-package com.example.twitterconnections.controller;
+package com.minitwitter.minitwitter.connections.controller;
 
-import com.example.twitterconnections.service.ConnectionsService;
-import com.example.twitterconnections.model.User;
+import com.minitwitter.minitwitter.connections.model.User;
+import com.minitwitter.minitwitter.connections.service.ConnectionsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

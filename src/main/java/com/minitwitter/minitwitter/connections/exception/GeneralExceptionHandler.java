@@ -1,4 +1,4 @@
-package com.example.twitterconnections.exception;
+package com.minitwitter.minitwitter.connections.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

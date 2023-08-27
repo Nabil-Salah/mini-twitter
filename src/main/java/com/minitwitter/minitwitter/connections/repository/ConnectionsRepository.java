@@ -1,6 +1,6 @@
-package com.example.twitterconnections.repository;
+package com.minitwitter.minitwitter.connections.repository;
 
-import com.example.twitterconnections.model.User;
+import com.minitwitter.minitwitter.connections.model.User;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
 import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.data.repository.query.Param;

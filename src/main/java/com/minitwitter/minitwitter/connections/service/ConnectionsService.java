@@ -1,9 +1,9 @@
-package com.example.twitterconnections.service;
+package com.minitwitter.minitwitter.connections.service;
 
-import com.example.twitterconnections.exception.UserAlreadyFollowedException;
-import com.example.twitterconnections.exception.UserNotFollowedException;
-import com.example.twitterconnections.model.User;
-import com.example.twitterconnections.repository.ConnectionsRepository;
+import com.minitwitter.minitwitter.connections.exception.UserAlreadyFollowedException;
+import com.minitwitter.minitwitter.connections.exception.UserNotFollowedException;
+import com.minitwitter.minitwitter.connections.model.User;
+import com.minitwitter.minitwitter.connections.repository.ConnectionsRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
