@@ -4,5 +4,9 @@ spring:
     authentication:
       username: neo4j
       password: admin12345
+  cassandra:
+    local-datacenter: datacenter1
+    keyspace-name: spring_cassandra
+    schema-action: create_if_not_exists
 server:
   port: 8081
