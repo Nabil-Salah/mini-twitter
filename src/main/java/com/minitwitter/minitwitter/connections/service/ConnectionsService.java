@@ -1,5 +1,6 @@
 package com.minitwitter.minitwitter.connections.service;
 
+import com.minitwitter.minitwitter.connections.exception.UserAddedBeforeException;
 import com.minitwitter.minitwitter.connections.exception.UserAlreadyFollowedException;
 import com.minitwitter.minitwitter.connections.exception.UserNotFollowedException;
 import com.minitwitter.minitwitter.connections.model.User;
@@ -16,51 +17,32 @@ public class ConnectionsService {
 
     private final ConnectionsRepository connectionsRepository;
 
-    public void addUser(User user){
+    public void addUser(User user) throws Exception {
+        //TODO : To be handled later
+        if(connectionsRepository.findById(user.getUsername()).isPresent())
+            throw new UserAddedBeforeException();
         connectionsRepository.save(user);
     }
-    public User getUser(UUID uuid){
-        return connectionsRepository.findById(uuid).get();
-    }
+
     public User getUser(String username){
-        return connectionsRepository.findByUsername(username).get();
+        return connectionsRepository.findById(username).get();
     }
     public Iterable<User> getAllUsers(){
         return connectionsRepository.findAll();
     }
 
-    public void deleteUser(UUID uuid){
-        User toBeDeletedUser = getUser(uuid);
-        connectionsRepository.delete(toBeDeletedUser);
-    }
     public void deleteUser(String username){
         User toBeDeletedUser = getUser(username);
         connectionsRepository.delete(toBeDeletedUser);
     }
 
     @Transactional
-    public void followUser(UUID followerId,UUID followingId){
-        User follower = connectionsRepository.findById(followerId).get();
-        User following = connectionsRepository.findById(followingId).get();
-
-        follower.getFollowing().forEach(user -> {
-            if (user.getId().equals(following.getId())) {
-                throw new UserAlreadyFollowedException();
-            }
-        });
-
-        follower.getFollowing().add(following);
-
-        connectionsRepository.followUser(followerId,followingId);
-    }
-
-    @Transactional
     public void followUser(String followerName,String followingName){
-        User follower = connectionsRepository.findByUsername(followerName).get();
-        User following = connectionsRepository.findByUsername(followingName).get();
+        User follower = connectionsRepository.findById(followerName).get();
+        User following = connectionsRepository.findById(followingName).get();
 
         follower.getFollowing().forEach(user -> {
-            if (user.getId().equals(following.getId())) {
+            if (user.getUsername().equals(following.getUsername())) {
                 throw new UserAlreadyFollowedException();
             }
         });
@@ -69,40 +51,24 @@ public class ConnectionsService {
 
         connectionsRepository.followUser(followerName,followingName);
     }
-    @Transactional
-    public void unFollowUser(UUID followerId,UUID followingId){
-        User follower = connectionsRepository.findById(followerId).get();
-        User following = connectionsRepository.findById(followingId).get();
 
-        if(!follower.getFollowing().removeIf(user -> user.getId().equals(following.getId())))
-            throw new UserNotFollowedException();
-
-        connectionsRepository.unFollowUser(followerId,followingId);
-    }
     @Transactional
     public void unFollowUser(String followerName,String followingName){
-        User follower = connectionsRepository.findByUsername(followerName).get();
-        User following = connectionsRepository.findByUsername(followingName).get();
+        User follower = connectionsRepository.findById(followerName).get();
+        User following = connectionsRepository.findById(followingName).get();
 
-        if(!follower.getFollowing().removeIf(user -> user.getId().equals(following.getId())))
+        if(!follower.getFollowing().removeIf(user -> user.getUsername().equals(following.getUsername())))
             throw new UserNotFollowedException();
 
         connectionsRepository.unFollowUser(followerName,followingName);
     }
-    public Iterable<User> getUserFollowers(UUID uuid){
-        connectionsRepository.findById(uuid).get();
-        return connectionsRepository.getFollowersById(uuid);
-    }
+
     public Iterable<User> getUserFollowers(String username){
-        connectionsRepository.findByUsername(username).get();
+        connectionsRepository.findById(username).get();
         return connectionsRepository.getFollowersByUsername(username);
     }
-    public Iterable<User> getUserFollowing(UUID uuid){
-
-        return connectionsRepository.findById(uuid).get().getFollowing();
-    }
     public Iterable<User> getUserFollowing(String username){
-        return connectionsRepository.findByUsername(username).get().getFollowing();
+        return connectionsRepository.findById(username).get().getFollowing();
     }
 
 }

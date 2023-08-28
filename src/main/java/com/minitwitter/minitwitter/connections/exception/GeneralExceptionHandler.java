@@ -24,9 +24,13 @@ public class GeneralExceptionHandler {
         return new ResponseEntity<>("Could not find user! ", HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(UserAddedBeforeException.class)
+    ResponseEntity<Object> handle(UserAddedBeforeException e){
+        return new ResponseEntity<>("User already added before! ", HttpStatus.BAD_REQUEST);
+    }
     @ExceptionHandler(Exception.class)
     ResponseEntity<Object> handle(Exception e){
-        e.printStackTrace();
-        return new ResponseEntity<>("Error found ", HttpStatus.INTERNAL_SERVER_ERROR);
+        //e.printStackTrace();
+        return new ResponseEntity<>("Error found! ", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }
