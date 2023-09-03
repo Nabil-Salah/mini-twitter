@@ -6,6 +6,8 @@ import com.minitwitter.minitwitter.Tweets.HomeTweet.HomeTweet;
 import com.minitwitter.minitwitter.Tweets.HomeTweet.HomeTweetService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,12 +29,29 @@ public class TweetService {
     public List<FeedTweet> getFeedTweets(String username){
         return feedTweetService.getTweetsByUsername(username);
     }
+
+    @KafkaListener(topics = "follow")
+    //@Transactional
+    public void consume(ConsumerRecord<String,String> record){
+        String follower = record.key();
+
+        String following = record.value();
+
+        List<HomeTweet> tweetsList = getHomeTweets(following);
+
+        tweetsList.forEach(tweet -> feedTweetService.addTweetsToOne(tweet,follower));
+
+    }
+
     @Transactional
     public void addTweet(String username, Map<String,Object> tweet){
         HomeTweet homeTweet = homeTweetService.addTweet(
                 username, tweet);
         feedTweetService.addTweet(homeTweet);
     }
+
+    //TODO , FIX DELETE,UPDATE
+
     @Transactional
     public void deleteTweet(String username, UUID tweetid, LocalDateTime createdAt, Map<String,Object> tweet){
         HomeTweet homeTweet = homeTweetService.deleteTweet(

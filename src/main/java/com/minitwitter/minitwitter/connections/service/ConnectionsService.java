@@ -8,6 +8,7 @@ import com.minitwitter.minitwitter.connections.model.User;
 import com.minitwitter.minitwitter.connections.repository.ConnectionsRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -18,8 +19,7 @@ import java.util.UUID;
 public class ConnectionsService {
 
     private final ConnectionsRepository connectionsRepository;
-    private final HomeTweetService homeTweetService;
-
+    private final KafkaTemplate<String,String> kafkaTemplate;
     public void addUser(User user) throws Exception {
         //TODO : To be handled later
         if(connectionsRepository.findById(user.getUsername()).isPresent())
@@ -53,6 +53,10 @@ public class ConnectionsService {
         follower.getFollowing().add(following);
 
         connectionsRepository.followUser(followerName,followingName);
+
+        //TODO : send message containing follower,following
+        kafkaTemplate.send("follow",followerName,followingName);
+
     }
 
     @Transactional

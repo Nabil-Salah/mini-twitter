@@ -6,7 +6,9 @@ import com.minitwitter.minitwitter.connections.controller.ConnectionsController;
 import com.minitwitter.minitwitter.connections.model.User;
 import com.minitwitter.minitwitter.connections.service.ConnectionsService;
 import lombok.AllArgsConstructor;
+import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -22,6 +24,21 @@ public class FeedTweetService {
         return feedRepository.findFeedTweetsByUsername(username);
     }
 
+    public void addTweetsToOne(HomeTweet homeTweet,String follower){
+        HomeTweetPrimaryKey primaryKey = homeTweet.getPrimaryKey();
+
+        FeedTweetPrimaryKey newprimaryKey = new FeedTweetPrimaryKey();
+        newprimaryKey.setFollowerusername(follower);
+        newprimaryKey.setTweetid(primaryKey.getTweetid());
+        newprimaryKey.setCreatedAt(primaryKey.getCreatedAt());
+
+        FeedTweet feedTweet = new FeedTweet(
+                newprimaryKey,
+                primaryKey.getUsername(),
+                homeTweet.getContent(),
+                homeTweet.getMediaUrls());
+        feedRepository.save(feedTweet);
+    }
     public void addTweet(HomeTweet homeTweet){
         HomeTweetPrimaryKey primaryKey = homeTweet.getPrimaryKey();
         Collection<User> followers = connectionsService.getUserFollowers(primaryKey.getUsername());

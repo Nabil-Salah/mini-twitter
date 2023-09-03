@@ -1,4 +1,14 @@
 spring:
+  kafka:
+    producer:
+      bootstrap-servers: localhost:29092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      bootstrap-servers: localhost:29092
+      group-id: group1
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
   neo4j:
     uri: bolt://localhost:7687/neo4j
     authentication:
@@ -10,3 +20,6 @@ spring:
     schema-action: create_if_not_exists
 server:
   port: 8081
+logging:
+  level:
+    root: trace
