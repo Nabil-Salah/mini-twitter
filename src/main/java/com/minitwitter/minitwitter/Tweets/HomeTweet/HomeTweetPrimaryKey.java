@@ -1,4 +1,4 @@
-package com.minitwitter.minitwitter.HomeTweet;
+package com.minitwitter.minitwitter.Tweets.HomeTweet;
 
 import lombok.Builder;
 import lombok.Generated;
@@ -17,13 +17,13 @@ import java.util.UUID;
 @Getter
 @Setter
 public class HomeTweetPrimaryKey {
-    @PrimaryKeyColumn(name = "username",ordinal = 0, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "username", type = PrimaryKeyType.PARTITIONED)
     private String username;
-    @PrimaryKeyColumn(name = "tweetid",ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "tweetid",ordinal = 1, type = PrimaryKeyType.CLUSTERED)
     @Generated
     private UUID tweetid;
 
-    @PrimaryKeyColumn(name = "createdAt", type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "createdAt",ordinal = 0, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     private LocalDateTime createdAt;
 
 

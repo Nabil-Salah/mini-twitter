@@ -1,4 +1,4 @@
-package com.minitwitter.minitwitter.FeedTweet;
+package com.minitwitter.minitwitter.Tweets.FeedTweet;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

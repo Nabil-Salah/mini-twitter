@@ -1,4 +1,13 @@
+version: '3.9'
+
 services:
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra-tweets
+    ports:
+      - 9042:9042
+    environment:
+      - CASSANDRA_CLUSTER_NAME= tweets
   neo4j:
     image: neo4j:latest
     container_name: neo4j-connections

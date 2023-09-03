@@ -27,5 +27,5 @@ public class User {
     @ToString.Exclude
     @Relationship(type = "FOLLOWS",direction = Relationship.Direction.OUTGOING)
     private Collection<User> following;
-
+    
 }

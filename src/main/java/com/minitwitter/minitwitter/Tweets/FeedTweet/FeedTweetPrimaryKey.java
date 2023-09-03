@@ -1,4 +1,4 @@
-package com.minitwitter.minitwitter.FeedTweet;
+package com.minitwitter.minitwitter.Tweets.FeedTweet;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -20,10 +20,10 @@ public class FeedTweetPrimaryKey {
     @PrimaryKeyColumn(name = "followerusername",ordinal = 0, type = PrimaryKeyType.PARTITIONED)
     private String followerusername;
 
-    @PrimaryKeyColumn(name = "tweetid",ordinal = 1, type = PrimaryKeyType.PARTITIONED)
+    @PrimaryKeyColumn(name = "tweetid",ordinal = 1, type = PrimaryKeyType.CLUSTERED)
     @GeneratedValue
     private UUID tweetid;
 
-    @PrimaryKeyColumn(name = "createdAt", type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
+    @PrimaryKeyColumn(name = "createdAt",ordinal = 0, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     private LocalDateTime createdAt;
 }

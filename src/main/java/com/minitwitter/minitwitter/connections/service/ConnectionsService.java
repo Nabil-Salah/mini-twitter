@@ -1,5 +1,6 @@
 package com.minitwitter.minitwitter.connections.service;
 
+import com.minitwitter.minitwitter.Tweets.HomeTweet.HomeTweetService;
 import com.minitwitter.minitwitter.connections.exception.UserAddedBeforeException;
 import com.minitwitter.minitwitter.connections.exception.UserAlreadyFollowedException;
 import com.minitwitter.minitwitter.connections.exception.UserNotFollowedException;
@@ -9,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.UUID;
 
 @Service
@@ -16,6 +18,7 @@ import java.util.UUID;
 public class ConnectionsService {
 
     private final ConnectionsRepository connectionsRepository;
+    private final HomeTweetService homeTweetService;
 
     public void addUser(User user) throws Exception {
         //TODO : To be handled later
@@ -63,11 +66,11 @@ public class ConnectionsService {
         connectionsRepository.unFollowUser(followerName,followingName);
     }
 
-    public Iterable<User> getUserFollowers(String username){
+    public Collection<User> getUserFollowers(String username){
         connectionsRepository.findById(username).get();
         return connectionsRepository.getFollowersByUsername(username);
     }
-    public Iterable<User> getUserFollowing(String username){
+    public Collection<User> getUserFollowing(String username){
         return connectionsRepository.findById(username).get().getFollowing();
     }
 

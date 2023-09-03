@@ -1,4 +1,4 @@
-package com.minitwitter.minitwitter.HomeTweet;
+package com.minitwitter.minitwitter.Tweets.HomeTweet;
 
 
 import lombok.AllArgsConstructor;

@@ -1,30 +1,23 @@
-package com.minitwitter.minitwitter.HomeTweet;
+package com.minitwitter.minitwitter.Tweets.HomeTweet;
 
-import com.minitwitter.minitwitter.FeedTweet.FeedTweetController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class HomeTweetService {
 
     private final HomeTweetRepositry homeRepository;
-    private final FeedTweetController feedTweetController;
     @Autowired
-    public HomeTweetService(HomeTweetRepositry homeRepository,
-                            FeedTweetController feedTweetController) {
+    public HomeTweetService(HomeTweetRepositry homeRepository) {
         this.homeRepository = homeRepository;
-        this.feedTweetController = feedTweetController;
     }
-    public List<HomeTweet> getTweets(){
-        return homeRepository.findAll();
+    public List<HomeTweet> getTweets(String username){
+        return homeRepository.findHomeTweetByUsername(username);
     }
-    public void addTweet(String username, Map<String, Object> tweet) {
+    public HomeTweet addTweet(String username, Map<String, Object> tweet) {
         if(username.isEmpty()){
             //throw error
         }
@@ -32,6 +25,7 @@ public class HomeTweetService {
         HomeTweetPrimaryKey primaryKey = new HomeTweetPrimaryKey();
         primaryKey.setUsername(username);
         primaryKey.setCreatedAt(nowTime);
+        primaryKey.setTweetid(UUID.randomUUID());
         if(!tweet.containsKey("content")){
             //throw error
         }else if(!(tweet.get("content") instanceof String)){
@@ -48,13 +42,9 @@ public class HomeTweetService {
                 .mediaUrls((List<String>) tweet.get("urls"))
                 .build();
         homeRepository.save(homeTweet);
-        feedTweetController.addTweet(primaryKey.getUsername(),
-                primaryKey.getTweetid(),
-                primaryKey.getCreatedAt(),
-                homeTweet.getContent(),
-                homeTweet.getMediaUrls());
+        return homeTweet;
     }
-    public void deleteTweet(String username,
+    public HomeTweet deleteTweet(String username,
                             UUID tweetid,
                             LocalDateTime createdAt,
                             Map<String,Object> tweet) {
@@ -65,11 +55,7 @@ public class HomeTweetService {
         primaryKey.setUsername(username);
         primaryKey.setCreatedAt(createdAt);
         primaryKey.setTweetid(tweetid);
-        Optional<HomeTweet> homeTweet = homeRepository.findById(primaryKey);
-        if(!homeTweet.isPresent()){
-            //throw error
-            return;
-        }
+        HomeTweet homeTweet = homeRepository.findById(primaryKey).get();
         if(!tweet.containsKey("content")){
             //throw error
         }else if(!(tweet.get("content") instanceof String)){
@@ -80,14 +66,10 @@ public class HomeTweetService {
         }else if(!(tweet.get("urls") instanceof List)){
             //throw error
         }
-        feedTweetController.deleteTweet(primaryKey.getUsername(),
-                primaryKey.getTweetid(),
-                primaryKey.getCreatedAt(),
-                homeTweet.get().getContent(),
-                homeTweet.get().getMediaUrls());
         homeRepository.deleteById(primaryKey);
+        return homeTweet;
     }
-    public void updateTweet(String username,
+    public HomeTweet updateTweet(String username,
                             UUID tweetid,
                             LocalDateTime createdAt,
                             Map<String,Object> tweet){
@@ -98,11 +80,7 @@ public class HomeTweetService {
         primaryKey.setUsername(username);
         primaryKey.setCreatedAt(createdAt);
         primaryKey.setTweetid(tweetid);
-        Optional<HomeTweet> homeTweet = homeRepository.findById(primaryKey);
-        if(!homeTweet.isPresent()){
-            //throw error
-            return;
-        }
+        HomeTweet homeTweet = homeRepository.findById(primaryKey).get();
         if(!tweet.containsKey("content")){
             //throw error
         }else if(!(tweet.get("content") instanceof String)){
@@ -113,14 +91,9 @@ public class HomeTweetService {
         }else if(!(tweet.get("urls") instanceof List)){
             //throw error
         }
-        homeRepository.findById(primaryKey).get().
-                setContent(tweet.get("content").toString());
-        homeRepository.findById(primaryKey).get().
-                setMediaUrls((List<String>) tweet.get("content"));
-        feedTweetController.updateTweet(primaryKey.getUsername(),
-                primaryKey.getTweetid(),
-                primaryKey.getCreatedAt(),
-                tweet.get("content").toString(),
-                (List<String>) tweet.get("content"));
+        homeTweet.setContent(tweet.get("content").toString());
+        homeTweet.setMediaUrls((List<String>) tweet.get("urls"));
+        homeRepository.save(homeTweet);
+        return homeTweet;
     }
 }
