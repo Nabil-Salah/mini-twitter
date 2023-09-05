@@ -1,4 +1,4 @@
-package com.minitwitter.minitwitter.connections.exception;
+package com.minitwitter.minitwitter.exceptions.connections;
 
 public class UserAlreadyFollowedException extends RuntimeException{
     public UserAlreadyFollowedException() {

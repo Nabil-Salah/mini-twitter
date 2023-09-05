@@ -1,4 +1,4 @@
-package com.minitwitter.minitwitter.connections.exception;
+package com.minitwitter.minitwitter.exceptions.connections;
 
 public class UserAddedBeforeException extends RuntimeException{
     public UserAddedBeforeException() {

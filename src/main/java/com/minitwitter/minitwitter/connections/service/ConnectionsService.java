@@ -1,9 +1,8 @@
 package com.minitwitter.minitwitter.connections.service;
 
-import com.minitwitter.minitwitter.Tweets.HomeTweet.HomeTweetService;
-import com.minitwitter.minitwitter.connections.exception.UserAddedBeforeException;
-import com.minitwitter.minitwitter.connections.exception.UserAlreadyFollowedException;
-import com.minitwitter.minitwitter.connections.exception.UserNotFollowedException;
+import com.minitwitter.minitwitter.exceptions.connections.UserAddedBeforeException;
+import com.minitwitter.minitwitter.exceptions.connections.UserAlreadyFollowedException;
+import com.minitwitter.minitwitter.exceptions.connections.UserNotFollowedException;
 import com.minitwitter.minitwitter.connections.model.User;
 import com.minitwitter.minitwitter.connections.repository.ConnectionsRepository;
 import jakarta.transaction.Transactional;
@@ -12,7 +11,6 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
-import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -20,7 +18,7 @@ public class ConnectionsService {
 
     private final ConnectionsRepository connectionsRepository;
     private final KafkaTemplate<String,String> kafkaTemplate;
-    public void addUser(User user) throws Exception {
+    public void addUser(User user) {
         //TODO : To be handled later
         if(connectionsRepository.findById(user.getUsername()).isPresent())
             throw new UserAddedBeforeException();

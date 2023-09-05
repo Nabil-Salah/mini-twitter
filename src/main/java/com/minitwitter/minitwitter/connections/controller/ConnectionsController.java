@@ -17,12 +17,6 @@ public class ConnectionsController {
         this.connectionsService = connectionsService;
     }
 
-    @PostMapping
-    public ResponseEntity<Object> addUser(@RequestBody User user) throws Exception {
-        connectionsService.addUser(user);
-        return new ResponseEntity<>("Created user successfully!",HttpStatus.OK);
-    }
-
     @PostMapping("/{follower}/follow/{following}")
     public ResponseEntity<Object> followUser(@PathVariable String follower, @PathVariable String following) {
         connectionsService.followUser(follower,following);
@@ -37,7 +31,6 @@ public class ConnectionsController {
     }
 
 
-
     @GetMapping("/{username}/following")
     public ResponseEntity<Object> getUserFollowing(@PathVariable String username){
         return new ResponseEntity<>(connectionsService.getUserFollowing(username),HttpStatus.OK);
@@ -47,20 +40,11 @@ public class ConnectionsController {
     public ResponseEntity<Object> getAllUsers(){
         return new ResponseEntity<>(connectionsService.getAllUsers(),HttpStatus.OK);
     }
-    @GetMapping("/{username}")
-    public ResponseEntity<Object> getUser(@PathVariable String username){
-        return new ResponseEntity<>(connectionsService.getUser(username),HttpStatus.OK);
-    }
 
     @GetMapping("/{username}/followers")
     public ResponseEntity<Object> getUserFollowers(@PathVariable String username){
         return new ResponseEntity<>(connectionsService.getUserFollowers(username),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{username}")
-    public ResponseEntity<Object> deleteUser(@PathVariable String username){
-        connectionsService.deleteUser(username);
-        return new ResponseEntity<>("Deleted user successfully!",HttpStatus.OK);
-    }
 }
 

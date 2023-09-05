@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.neo4j.cypherdsl.core.Use;
 import org.springframework.data.neo4j.core.schema.GeneratedValue;
 import org.springframework.data.neo4j.core.schema.Id;
 import org.springframework.data.neo4j.core.schema.Node;
@@ -22,6 +23,10 @@ public class User {
 
     @Id
     private String username;
+
+    public User(String username){
+        this.username = username;
+    }
 
     @JsonIgnore
     @ToString.Exclude
