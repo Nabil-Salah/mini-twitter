@@ -29,7 +29,7 @@ public class FeedTweetService {
 
         FeedTweetPrimaryKey newprimaryKey = new FeedTweetPrimaryKey();
         newprimaryKey.setFollowerusername(follower);
-        newprimaryKey.setTweetid(primaryKey.getTweetid());
+        newprimaryKey.setTweetid(homeTweet.getTweetid());
         newprimaryKey.setCreatedAt(primaryKey.getCreatedAt());
 
         FeedTweet feedTweet = new FeedTweet(
@@ -39,13 +39,20 @@ public class FeedTweetService {
                 homeTweet.getMediaUrls());
         feedRepository.save(feedTweet);
     }
+    public void deleteTweetFromOne(HomeTweet homeTweet,String follower){
+        FeedTweetPrimaryKey feedTweetPrimaryKey = new FeedTweetPrimaryKey();
+        feedTweetPrimaryKey.setFollowerusername(follower);
+        feedTweetPrimaryKey.setTweetid(homeTweet.getTweetid());
+        feedTweetPrimaryKey.setCreatedAt(homeTweet.getPrimaryKey().getCreatedAt());
+        feedRepository.deleteById(feedTweetPrimaryKey);
+    }
     public void addTweet(HomeTweet homeTweet){
         HomeTweetPrimaryKey primaryKey = homeTweet.getPrimaryKey();
         Collection<User> followers = connectionsService.getUserFollowers(primaryKey.getUsername());
         followers.forEach(user -> {
             FeedTweetPrimaryKey newprimaryKey = new FeedTweetPrimaryKey();
             newprimaryKey.setFollowerusername(user.getUsername());
-            newprimaryKey.setTweetid(primaryKey.getTweetid());
+            newprimaryKey.setTweetid(homeTweet.getTweetid());
             newprimaryKey.setCreatedAt(primaryKey.getCreatedAt());
             FeedTweet feedTweet = new FeedTweet(
                     newprimaryKey,
@@ -61,7 +68,7 @@ public class FeedTweetService {
         followers.forEach(user -> {
             FeedTweetPrimaryKey newprimaryKey = new FeedTweetPrimaryKey();
             newprimaryKey.setFollowerusername(user.getUsername());
-            newprimaryKey.setTweetid(primaryKey.getTweetid());
+            newprimaryKey.setTweetid(homeTweet.getTweetid());
             newprimaryKey.setCreatedAt(primaryKey.getCreatedAt());
             FeedTweet feedTweet = new FeedTweet(
                     newprimaryKey,
@@ -77,7 +84,7 @@ public class FeedTweetService {
         followers.forEach(user -> {
             FeedTweetPrimaryKey newprimaryKey = new FeedTweetPrimaryKey();
             newprimaryKey.setFollowerusername(user.getUsername());
-            newprimaryKey.setTweetid(primaryKey.getTweetid());
+            newprimaryKey.setTweetid(homeTweet.getTweetid());
             newprimaryKey.setCreatedAt(primaryKey.getCreatedAt());
             FeedTweet feedTweet = feedRepository.findById(newprimaryKey).get();
             feedTweet.setContent(homeTweet.getContent());

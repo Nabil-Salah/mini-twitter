@@ -18,14 +18,10 @@ public class HomeTweetService {
         return homeRepository.findHomeTweetByUsername(username);
     }
     public HomeTweet addTweet(String username, Map<String, Object> tweet) {
-        if(username.isEmpty()){
-            //throw error
-        }
         LocalDateTime nowTime = LocalDateTime.now();
         HomeTweetPrimaryKey primaryKey = new HomeTweetPrimaryKey();
         primaryKey.setUsername(username);
         primaryKey.setCreatedAt(nowTime);
-        primaryKey.setTweetid(UUID.randomUUID());
         if(!tweet.containsKey("content")){
             //throw error
         }else if(!(tweet.get("content") instanceof String)){
@@ -38,61 +34,37 @@ public class HomeTweetService {
         }
         HomeTweet homeTweet = HomeTweet.builder()
                         .primaryKey(primaryKey)
-                .content(tweet.get("content").toString())
+                .content(tweet.get("content").toString()).tweetid(UUID.randomUUID())
                 .mediaUrls((List<String>) tweet.get("urls"))
                 .build();
         homeRepository.save(homeTweet);
         return homeTweet;
     }
     public HomeTweet deleteTweet(String username,
-                            UUID tweetid,
-                            LocalDateTime createdAt,
-                            Map<String,Object> tweet) {
-        if(username.isEmpty()){
-            //throw error
-        }
-        HomeTweetPrimaryKey primaryKey = new HomeTweetPrimaryKey();
-        primaryKey.setUsername(username);
-        primaryKey.setCreatedAt(createdAt);
-        primaryKey.setTweetid(tweetid);
-        HomeTweet homeTweet = homeRepository.findById(primaryKey).get();
-        if(!tweet.containsKey("content")){
-            //throw error
-        }else if(!(tweet.get("content") instanceof String)){
-            //throw error
-        }
-        if(!tweet.containsKey("urls")){
-            //throw error
-        }else if(!(tweet.get("urls") instanceof List)){
-            //throw error
-        }
-        homeRepository.deleteById(primaryKey);
+                            UUID tweetid) {
+        HomeTweet homeTweet = homeRepository.findByUsernameAndTweetid(username,tweetid).get();
+        homeRepository.deleteById(homeTweet.getPrimaryKey());
         return homeTweet;
     }
+
     public HomeTweet updateTweet(String username,
                             UUID tweetid,
-                            LocalDateTime createdAt,
                             Map<String,Object> tweet){
-        if(username.isEmpty()){
-            //throw error
+        HomeTweet homeTweet = homeRepository.findByUsernameAndTweetid(username, tweetid).get();
+        if(tweet.containsKey("content")){
+            if(tweet.get("content") instanceof String){
+                homeTweet.setContent(tweet.get("content").toString());
+            }else{
+                //throw error
+            }
         }
-        HomeTweetPrimaryKey primaryKey = new HomeTweetPrimaryKey();
-        primaryKey.setUsername(username);
-        primaryKey.setCreatedAt(createdAt);
-        primaryKey.setTweetid(tweetid);
-        HomeTweet homeTweet = homeRepository.findById(primaryKey).get();
-        if(!tweet.containsKey("content")){
-            //throw error
-        }else if(!(tweet.get("content") instanceof String)){
-            //throw error
+        if(tweet.containsKey("urls")){
+            if(tweet.get("urls") instanceof List){
+                homeTweet.setMediaUrls((List<String>) tweet.get("urls"));
+            }else{
+                //throw error
+            }
         }
-        if(!tweet.containsKey("urls")){
-            //throw error
-        }else if(!(tweet.get("urls") instanceof List)){
-            //throw error
-        }
-        homeTweet.setContent(tweet.get("content").toString());
-        homeTweet.setMediaUrls((List<String>) tweet.get("urls"));
         homeRepository.save(homeTweet);
         return homeTweet;
     }

@@ -10,6 +10,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKey;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.List;
+import java.util.UUID;
 
 @Table
 @Getter
@@ -19,6 +20,9 @@ import java.util.List;
 public class HomeTweet {
     @PrimaryKey
     private HomeTweetPrimaryKey primaryKey;
+
+    @Column(value = "tweetid")
+    private UUID tweetid;
 
     @Column(value = "content")
     private String content;

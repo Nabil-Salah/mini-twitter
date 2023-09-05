@@ -19,9 +19,6 @@ import java.util.UUID;
 public class HomeTweetPrimaryKey {
     @PrimaryKeyColumn(name = "username", type = PrimaryKeyType.PARTITIONED)
     private String username;
-    @PrimaryKeyColumn(name = "tweetid",ordinal = 1, type = PrimaryKeyType.CLUSTERED)
-    @Generated
-    private UUID tweetid;
 
     @PrimaryKeyColumn(name = "createdAt",ordinal = 0, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING)
     private LocalDateTime createdAt;

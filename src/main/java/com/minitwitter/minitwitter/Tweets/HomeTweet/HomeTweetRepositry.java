@@ -15,6 +15,9 @@ public interface HomeTweetRepositry extends CassandraRepository<HomeTweet, HomeT
 
     @Query("SELECT * FROM hometweet where tweetid = ?0")
     Optional<HomeTweet> findHomeTweetByTweetID(UUID uuid);
+    @Query("SELECT * FROM hometweet where username=?0 and tweetid = ?1 ALLOW FILTERING")
+    Optional<HomeTweet> findByUsernameAndTweetid(String username,UUID tweetid);
+
 }
 
 

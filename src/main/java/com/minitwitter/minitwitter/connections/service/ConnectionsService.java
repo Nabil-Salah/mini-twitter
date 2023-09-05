@@ -68,6 +68,7 @@ public class ConnectionsService {
             throw new UserNotFollowedException();
 
         connectionsRepository.unFollowUser(followerName,followingName);
+        kafkaTemplate.send("unFollow",followerName,followingName);
     }
 
     public Collection<User> getUserFollowers(String username){

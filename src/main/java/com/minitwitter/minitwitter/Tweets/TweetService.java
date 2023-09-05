@@ -31,8 +31,8 @@ public class TweetService {
     }
 
     @KafkaListener(topics = "follow")
-    //@Transactional
-    public void consume(ConsumerRecord<String,String> record){
+    @Transactional
+    public void followConsume(ConsumerRecord<String,String> record){
         String follower = record.key();
 
         String following = record.value();
@@ -42,7 +42,18 @@ public class TweetService {
         tweetsList.forEach(tweet -> feedTweetService.addTweetsToOne(tweet,follower));
 
     }
+    @KafkaListener(topics = "unFollow")
+    @Transactional
+    public void unFollowConsume(ConsumerRecord<String,String> record){
+        String follower = record.key();
 
+        String following = record.value();
+
+        List<HomeTweet> tweetsList = getHomeTweets(following);
+
+        tweetsList.forEach(tweet -> feedTweetService.deleteTweetFromOne(tweet,follower));
+
+    }
     @Transactional
     public void addTweet(String username, Map<String,Object> tweet){
         HomeTweet homeTweet = homeTweetService.addTweet(
@@ -50,18 +61,17 @@ public class TweetService {
         feedTweetService.addTweet(homeTweet);
     }
 
-    //TODO , FIX DELETE,UPDATE
 
     @Transactional
-    public void deleteTweet(String username, UUID tweetid, LocalDateTime createdAt, Map<String,Object> tweet){
+    public void deleteTweet(String username, UUID tweetid){
         HomeTweet homeTweet = homeTweetService.deleteTweet(
-                username, tweetid, createdAt, tweet);
+                username, tweetid);
         feedTweetService.deleteTweet(homeTweet);
     }
     @Transactional
-    public void updateTweet(String username, UUID tweetid, LocalDateTime createdAt, Map<String,Object> tweet){
+    public void updateTweet(String username, UUID tweetid, Map<String,Object> tweet){
         HomeTweet homeTweet = homeTweetService.updateTweet(
-                username, tweetid, createdAt, tweet);
+                username, tweetid, tweet);
         feedTweetService.updateTweet(homeTweet);
     }
 
