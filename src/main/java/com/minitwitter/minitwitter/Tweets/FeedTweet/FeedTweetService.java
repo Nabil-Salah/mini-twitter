@@ -5,6 +5,7 @@ import com.minitwitter.minitwitter.Tweets.HomeTweet.HomeTweetPrimaryKey;
 import com.minitwitter.minitwitter.connections.controller.ConnectionsController;
 import com.minitwitter.minitwitter.connections.model.User;
 import com.minitwitter.minitwitter.connections.service.ConnectionsService;
+import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,19 @@ public class FeedTweetService {
             feedRepository.save(feedTweet);
         });
     }
+
+    private boolean hasFollowings(String username){
+        return feedRepository.existsByUsername(username) != 0;
+    }
+
+    public void deleteAllTweets(String username){
+        if(hasFollowings(username))
+            feedRepository.deleteUserFeed(username);
+        //TODO delete all tweets of the followers
+        /*if(!connectionsService.getUserFollowers(username).isEmpty())
+            feedRepository.deleteAllByFolloweeusername(username);*/
+    }
+
     public void deleteTweet(HomeTweet homeTweet) {
         HomeTweetPrimaryKey primaryKey = homeTweet.getPrimaryKey();
         Collection<User> followers = connectionsService.getUserFollowers(primaryKey.getUsername());

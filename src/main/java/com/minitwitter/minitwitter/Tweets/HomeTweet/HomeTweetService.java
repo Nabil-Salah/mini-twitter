@@ -1,5 +1,6 @@
 package com.minitwitter.minitwitter.Tweets.HomeTweet;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,7 +16,7 @@ public class HomeTweetService {
         this.homeRepository = homeRepository;
     }
     public List<HomeTweet> getTweets(String username){
-        return homeRepository.findHomeTweetByUsername(username);
+        return homeRepository.findHomeTweetByUsername(username).get();
     }
     public HomeTweet addTweet(String username, Map<String, Object> tweet) {
         LocalDateTime nowTime = LocalDateTime.now();
@@ -40,6 +41,15 @@ public class HomeTweetService {
         homeRepository.save(homeTweet);
         return homeTweet;
     }
+
+    public boolean haveTweets(String username){
+        return homeRepository.existsByUsername(username) != 0;
+    }
+
+    public void deleteAllTweets(String username){
+        homeRepository.deleteAllByUsername(username);
+    }
+
     public HomeTweet deleteTweet(String username,
                             UUID tweetid) {
         HomeTweet homeTweet = homeRepository.findByUsernameAndTweetid(username,tweetid).get();

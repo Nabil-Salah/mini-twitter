@@ -49,16 +49,7 @@ public class ProfileService {
     }
     @Transactional
     public void deleteAccount(String username){
-        Account account = accountRepository.findById(username).get();
-        Profile profile = profileRepository.findById(username).get();
-
-        transactionTemplate.execute(new TransactionCallbackWithoutResult() {
-            @Override
-            public void doInTransactionWithoutResult(TransactionStatus transactionStatus) {
-                accountRepository.delete(account);
-                profileRepository.delete(profile);
-            }
-        });
+        profileRepository.deleteById(username);
     }
 
 

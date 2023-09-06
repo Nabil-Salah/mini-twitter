@@ -1,6 +1,5 @@
 package com.minitwitter.minitwitter.profiles.controller;
 
-import com.minitwitter.minitwitter.profiles.model.Profile;
 import com.minitwitter.minitwitter.profiles.service.ProfileService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

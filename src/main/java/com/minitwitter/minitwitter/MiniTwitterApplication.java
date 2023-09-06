@@ -12,5 +12,4 @@ public class MiniTwitterApplication {
 		SpringApplication.run(MiniTwitterApplication.class, args);
 	}
 
-
 }

@@ -1,6 +1,5 @@
 package com.minitwitter.minitwitter.connections.service;
 
-import com.minitwitter.minitwitter.exceptions.connections.UserAddedBeforeException;
 import com.minitwitter.minitwitter.exceptions.connections.UserAlreadyFollowedException;
 import com.minitwitter.minitwitter.exceptions.connections.UserNotFollowedException;
 import com.minitwitter.minitwitter.connections.model.User;
@@ -19,9 +18,6 @@ public class ConnectionsService {
     private final ConnectionsRepository connectionsRepository;
     private final KafkaTemplate<String,String> kafkaTemplate;
     public void addUser(User user) {
-        //TODO : To be handled later
-        if(connectionsRepository.findById(user.getUsername()).isPresent())
-            throw new UserAddedBeforeException();
         connectionsRepository.save(user);
     }
 
@@ -52,7 +48,6 @@ public class ConnectionsService {
 
         connectionsRepository.followUser(followerName,followingName);
 
-        //TODO : send message containing follower,following
         kafkaTemplate.send("follow",followerName,followingName);
 
     }
@@ -66,6 +61,7 @@ public class ConnectionsService {
             throw new UserNotFollowedException();
 
         connectionsRepository.unFollowUser(followerName,followingName);
+
         kafkaTemplate.send("unFollow",followerName,followingName);
     }
 

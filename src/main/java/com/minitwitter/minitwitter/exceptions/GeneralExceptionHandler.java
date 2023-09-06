@@ -8,6 +8,7 @@ import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
+import org.springframework.transaction.TransactionException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -41,7 +42,7 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(NoSuchElementException.class)
     public ResponseEntity<Object> handle(NoSuchElementException ex) {
 
-        return new ResponseEntity<>("User not found!", HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("Could not find what you requested!", HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(InternalAuthenticationServiceException.class)
@@ -68,11 +69,6 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(UserNotFollowedException.class)
     ResponseEntity<Object> handle(UserNotFollowedException e){
         return new ResponseEntity<>("You are not following this user! ", HttpStatus.BAD_REQUEST);
-    }
-
-    @ExceptionHandler(UserAddedBeforeException.class)
-    ResponseEntity<Object> handle(UserAddedBeforeException e){
-        return new ResponseEntity<>("User already added before! ", HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(Exception.class)
     ResponseEntity<Object> handle(Exception e){

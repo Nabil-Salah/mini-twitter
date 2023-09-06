@@ -62,6 +62,16 @@ public class TweetService {
     }
 
 
+    public boolean haveTweets(String username){
+        return homeTweetService.haveTweets(username);
+    }
+
+    public void deleteTweetsByUsername(String username){
+        homeTweetService.deleteAllTweets(username);
+        feedTweetService.deleteAllTweets(username);
+        System.out.println("HERE");
+    }
+
     @Transactional
     public void deleteTweet(String username, UUID tweetid){
         HomeTweet homeTweet = homeTweetService.deleteTweet(

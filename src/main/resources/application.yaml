@@ -1,4 +1,17 @@
 spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://minitwitter547:<password>@mini-twitter.buauix4.mongodb.net/?retryWrites=true&w=majority
+      database: user_profile
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth
+    username: admin
+    password: admin
   kafka:
     producer:
       bootstrap-servers: localhost:29092
@@ -18,6 +31,17 @@ spring:
     local-datacenter: datacenter1
     keyspace-name: spring_cassandra
     schema-action: create_if_not_exists
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: minitwitter547@gmail.com
+    password: <password>
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 server:
   port: 8081
 #logging:

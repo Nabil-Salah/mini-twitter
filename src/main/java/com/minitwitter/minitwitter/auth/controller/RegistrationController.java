@@ -23,6 +23,11 @@ public class RegistrationController {
         registrationService.registerAccount(user);
         return new ResponseEntity<>("Your account has been created successfully!",HttpStatus.OK);
     }
+    @DeleteMapping("/{username}")
+    public ResponseEntity<Object> deleteAccount(@PathVariable String username){
+        registrationService.deleteAccount(username);
+        return new ResponseEntity<>("Your account has been deleted successfully!",HttpStatus.OK);
+    }
     @GetMapping("/confirm-account/{confirmationToken}")
     public ResponseEntity<?> confirmUserAccount(@PathVariable String confirmationToken) {
         return registrationService.confirmEmail(confirmationToken);
