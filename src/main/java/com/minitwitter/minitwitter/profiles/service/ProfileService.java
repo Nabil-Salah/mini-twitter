@@ -47,7 +47,6 @@ public class ProfileService {
         profile.setBirthDate(birthDate);
         profileRepository.save(profile);
     }
-    @Transactional
     public void deleteAccount(String username){
         profileRepository.deleteById(username);
     }

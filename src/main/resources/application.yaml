@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb+srv://minitwitter547:<password>@mini-twitter.buauix4.mongodb.net/?retryWrites=true&w=majority
+      uri: mongodb+srv://minitwitter547:IijivWpzuJURrQZD@mini-twitter.buauix4.mongodb.net/?retryWrites=true&w=majority
       database: user_profile
   jpa:
     show-sql: true
@@ -35,7 +35,7 @@ spring:
     host: smtp.gmail.com
     port: 587
     username: minitwitter547@gmail.com
-    password: <password>
+    password: xnxgiesaotudhigd
     properties:
       mail:
         smtp:

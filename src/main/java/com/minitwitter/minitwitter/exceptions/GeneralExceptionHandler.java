@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.transaction.TransactionException;
+import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -21,12 +22,19 @@ import java.util.*;
 public class GeneralExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Object> handle(MethodArgumentNotValidException ex) {
-        Map<String, String> errors = new HashMap<>();
+        /*Map<String, String> errors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
+        });*/
+        BindingResult bindingResult = ex.getBindingResult();
+        List<String> errors = new ArrayList<>();
+        bindingResult.getFieldErrors().forEach(fieldError -> {
+            String errorMessage = fieldError.getDefaultMessage();
+            errors.add(errorMessage);
         });
+        System.out.println(errors);
         return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
     }
     @ExceptionHandler(ConstraintViolationException.class)
@@ -35,6 +43,7 @@ public class GeneralExceptionHandler {
         ex.getConstraintViolations().forEach((error) -> {
             errors.put(error.getPropertyPath().toString(),error.getMessage());
         });
+        System.out.println("CONSTRAINT" + ex.getConstraintViolations());
 
         return new ResponseEntity<>(errors,HttpStatus.BAD_REQUEST);
     }
