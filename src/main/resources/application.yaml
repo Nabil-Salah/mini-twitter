@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: 
+      uri:
       database: user_profile
   jpa:
     show-sql: true
